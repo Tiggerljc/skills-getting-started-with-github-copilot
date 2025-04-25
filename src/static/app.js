@@ -43,10 +43,28 @@ document.addEventListener("DOMContentLoaded", () => {
         option.textContent = name;
         activitySelect.appendChild(option);
       });
+
+      // Add event listener to update participant info on activity selection
+      activitySelect.addEventListener("change", (event) => {
+        const selectedActivity = event.target.value;
+        if (selectedActivity && activities[selectedActivity]) {
+          updateParticipantInfo(activities[selectedActivity]);
+        } else {
+          document.getElementById("participant-list").innerHTML = "<li>No activity selected</li>";
+        }
+      });
     } catch (error) {
       activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
       console.error("Error fetching activities:", error);
     }
+  }
+
+  // Function to update participant info
+  function updateParticipantInfo(activityDetails) {
+    const participantList = document.getElementById("participant-list");
+    participantList.innerHTML = activityDetails.participants.length
+      ? activityDetails.participants.map((participant) => `<li>${participant}</li>`).join("")
+      : "<li>No participants yet</li>";
   }
 
   // Handle form submission
